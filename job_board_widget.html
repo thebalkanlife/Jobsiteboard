@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Remote Job Board Finder</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #fff; color: #1a1a1a; padding: 24px 16px; }
+  h2 { font-size: 20px; font-weight: 600; margin-bottom: 6px; color: #3A3834; }
+  .subtitle { font-size: 14px; color: #888; margin-bottom: 20px; }
+  .filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+  .filter-btn {
+    font-size: 13px;
+    font-family: inherit;
+    padding: 6px 14px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    background: #fff;
+    color: #555;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .filter-btn:hover { background: #f5f5f5; }
+  .filter-btn.active {
+    background: #5AADAC;
+    color: #fff;
+    border-color: #5AADAC;
+  }
+  .count { font-size: 13px; color: #888; margin-bottom: 16px; }
+  .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; }
+  .card {
+    background: #fff;
+    border: 1px solid #e8e8e8;
+    border-radius: 12px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+  .card-name { font-size: 15px; font-weight: 600; color: #3A3834; }
+  .tier-badge {
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 6px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    font-weight: 500;
+  }
+  .tier-1 { background: #E1F5EE; color: #0F6E56; }
+  .tier-2 { background: #FFF3DC; color: #854F0B; }
+  .tier-3 { background: #E6F1FB; color: #185FA5; }
+  .best-for { font-size: 13px; color: #444; line-height: 1.5; }
+  .best-for strong { color: #1a1a1a; font-weight: 600; }
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tag {
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 6px;
+    border: 1px solid #e8e8e8;
+    color: #666;
+    background: #f9f9f7;
+  }
+  .note {
+    font-size: 12px;
+    color: #999;
+    line-height: 1.5;
+    border-top: 1px solid #f0f0f0;
+    padding-top: 10px;
+  }
+  .tier-divider {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #FF9588;
+    margin: 8px 0 4px;
+  }
+</style>
+</head>
+<body>
+
+<h2>Find your platform</h2>
+<p class="subtitle">Filter by your situation to find the right job boards to start with.</p>
+
+<div class="filters" id="filters"></div>
+<div class="count" id="count"></div>
+<div class="cards" id="cards"></div>
+
+<script>
+const boards = [
+  { name: "Real Work From Anywhere", tier: 1, tags: ["entry", "mid", "senior", "tech", "marketing", "customer support", "no visa", "relocating"], bestFor: "Anyone who wants guaranteed WFA — every listing is hand-picked, zero location restrictions.", note: "The only board that explicitly guarantees every listing is truly worldwide." },
+  { name: "Working Nomads", tier: 1, tags: ["entry", "mid", "relocating", "nomad", "non-tech", "tech"], bestFor: "People relocating to the Balkans — built with timezone flexibility and travel in mind.", note: "One of the few boards that actively filters for timezone flexibility, not just 'remote'." },
+  { name: "We Work Remotely", tier: 1, tags: ["mid", "senior", "design", "marketing", "tech", "customer support"], bestFor: "Mid-level professionals across design, marketing, customer support, and programming.", note: "Companies here are genuinely remote-first — better work environments as a result." },
+  { name: "Remote.co", tier: 1, tags: ["entry", "mid", "writing", "project management", "tech", "customer support"], bestFor: "Broad range — especially writing, customer service, and project management.", note: "Every listing reviewed. Strong educational resources — great for first-timers." },
+  { name: "Jobspresso", tier: 1, tags: ["mid", "senior", "writing", "marketing", "tech", "design"], bestFor: "Quality over quantity — highly curated and scam-free.", note: "Upload your CV — recruiters can find you directly." },
+  { name: "JustRemote", tier: 1, tags: ["entry", "mid", "non-tech", "first-time"], bestFor: "First-time remote job seekers who want a clean, simple search.", note: "Best starting point before moving to larger, noisier boards." },
+  { name: "NoDesk", tier: 1, tags: ["mid", "senior", "research", "all fields"], bestFor: "People who want to research companies thoroughly before applying.", note: "Listings + company profiles + guides — use in your research phase." },
+  { name: "Remote OK", tier: 2, tags: ["entry", "mid", "senior", "tech", "design", "marketing", "customer support"], bestFor: "Broad search with salary transparency — always filter for the 'worldwide' tag.", note: "Companies hiding pay often hide location requirements too — filter hard." },
+  { name: "FlexJobs", tier: 2, tags: ["mid", "senior", "verified", "all fields"], bestFor: "Serious job seekers wanting verified, scam-free listings.", note: "Paid (~$15/mo) — worth it if remote work is your primary focus." },
+  { name: "Himalayas", tier: 2, tags: ["mid", "senior", "tech", "timezone"], bestFor: "Tech and adjacent roles where timezone and company culture matter.", note: "Advanced timezone and work permit filters — one of the most transparent boards." },
+  { name: "DailyRemote", tier: 2, tags: ["entry", "mid", "non-tech", "healthcare", "education", "admin"], bestFor: "Non-tech roles — healthcare, education, admin — underrepresented elsewhere.", note: "50k+ listings updated daily. Covers sectors most boards miss." },
+  { name: "LinkedIn Jobs", tier: 2, tags: ["mid", "senior", "networking", "all fields"], bestFor: "Professionals using networking as their primary strategy.", note: "Search 'worldwide / async / distributed'. Real power is warm outreach, not cold applying." },
+  { name: "Wellfound", tier: 3, tags: ["mid", "senior", "tech", "product", "startup"], bestFor: "Tech and product professionals comfortable with startup risk.", note: "Startups often more flexible on location than established corporates." },
+  { name: "Arc", tier: 3, tags: ["mid", "senior", "developers", "tech"], bestFor: "Software developers exclusively — vetted companies, strong salaries.", note: "Competitive vetting but one of the strongest platforms for developers." },
+  { name: "Remote100k", tier: 3, tags: ["senior", "6-figure", "all fields"], bestFor: "Experienced professionals targeting $100k+ senior roles only.", note: "Not a starting point — only if you have 5+ years experience to back it up." },
+  { name: "Built In", tier: 3, tags: ["mid", "senior", "tech", "research"], bestFor: "Tech professionals who want deep company context and salary data.", note: "Better for research than pure job hunting — cross-reference with WFA boards." },
+  { name: "No Visa Jobs", tier: 3, tags: ["entry", "mid", "no visa", "relocating", "international"], bestFor: "Non-US/UK/EU audience relocating — no visa sponsorship needed.", note: "Built precisely for people in this community's situation." },
+  { name: "FindAsync", tier: 3, tags: ["mid", "senior", "async", "timezone"], bestFor: "Anyone wanting to confirm a company is truly async before applying.", note: "If a company is here, they have committed to timezone freedom." },
+  { name: "Jobgether", tier: 3, tags: ["entry", "mid", "guided", "all fields"], bestFor: "People who feel overwhelmed and want AI-matching and guided support.", note: "Built-in CV and LinkedIn optimisation — more hand-holding through the process." },
+  { name: "Contra", tier: 3, tags: ["entry", "mid", "freelance", "design", "writing", "marketing", "tech"], bestFor: "Freelancers who want to keep 100% of earnings — zero commission.", note: "Most platforms take 10–20%. Contra takes none. Great for building a client base." },
+];
+
+const filterDefs = [
+  { tag: "entry", label: "Entry level" },
+  { tag: "mid", label: "Mid level" },
+  { tag: "senior", label: "Senior / 5+ yrs" },
+  { tag: "tech", label: "Tech roles" },
+  { tag: "non-tech", label: "Non-tech roles" },
+  { tag: "design", label: "Design" },
+  { tag: "marketing", label: "Marketing" },
+  { tag: "writing", label: "Writing / content" },
+  { tag: "customer support", label: "Customer support" },
+  { tag: "freelance", label: "Freelance / contract" },
+  { tag: "no visa", label: "No visa required" },
+  { tag: "relocating", label: "Relocating to Balkans" },
+  { tag: "startup", label: "Startup roles" },
+  { tag: "developers", label: "Developers only" },
+  { tag: "6-figure", label: "$100k+ roles" },
+  { tag: "async", label: "Async-first" },
+  { tag: "guided", label: "Guided / AI search" },
+];
+
+const tierLabels = { 1: "Tier 1 — curated", 2: "Tier 2 — filtered", 3: "Tier 3 — niche" };
+const tagLabels = {};
+filterDefs.forEach(f => tagLabels[f.tag] = f.label);
+
+let active = new Set();
+
+const filtersEl = document.getElementById("filters");
+const cardsEl = document.getElementById("cards");
+const countEl = document.getElementById("count");
+
+filterDefs.forEach(({ tag, label }) => {
+  const btn = document.createElement("button");
+  btn.className = "filter-btn";
+  btn.textContent = label;
+  btn.dataset.tag = tag;
+  btn.onclick = () => {
+    if (active.has(tag)) { active.delete(tag); btn.classList.remove("active"); }
+    else { active.add(tag); btn.classList.add("active"); }
+    render();
+  };
+  filtersEl.appendChild(btn);
+});
+
+function render() {
+  const visible = boards.filter(b => active.size === 0 || [...active].every(t => b.tags.includes(t)));
+  countEl.textContent = active.size === 0
+    ? "Showing all " + boards.length + " platforms"
+    : visible.length + " platform" + (visible.length !== 1 ? "s" : "") + " match your filters";
+  cardsEl.innerHTML = "";
+  visible.forEach(b => {
+    const card = document.createElement("div");
+    card.className = "card";
+    const tagHTML = b.tags.map(t => `<span class="tag">${tagLabels[t] || t}</span>`).join("");
+    card.innerHTML = `
+      <div class="card-top">
+        <span class="card-name">${b.name}</span>
+        <span class="tier-badge tier-${b.tier}">${tierLabels[b.tier]}</span>
+      </div>
+      <div class="best-for"><strong>Best for:</strong> ${b.bestFor}</div>
+      <div class="tags">${tagHTML}</div>
+      <div class="note">${b.note}</div>
+    `;
+    cardsEl.appendChild(card);
+  });
+}
+
+render();
+</script>
+</body>
+</html>
