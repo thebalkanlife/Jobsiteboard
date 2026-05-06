@@ -3,90 +3,333 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Remote Job Board Finder</title>
+<title>Remote Job Board Finder — Renaissance</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #fff; color: #1a1a1a; padding: 24px 16px; }
-  h2 { font-size: 20px; font-weight: 600; margin-bottom: 6px; color: #3A3834; }
-  .subtitle { font-size: 14px; color: #888; margin-bottom: 20px; }
-  .filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
-  .filter-btn {
-    font-size: 13px;
-    font-family: inherit;
+  :root {
+    --cream: #EFE9DE;
+    --warm-grey: #C7C3C1;
+    --coral: #FF9588;
+    --teal: #5AADAC;
+    --dark: #3d3a36;
+    --mid: #6b6560;
+    --light-bg: #f9f6f1;
+    --white: #ffffff;
+    --card-border: #e8e2d8;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--light-bg);
+    color: var(--dark);
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  .header {
+    background: var(--dark);
+    padding: 48px 24px 40px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .header::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(to right, var(--coral), var(--teal));
+  }
+
+  .header-tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 16px;
+    padding: 4px 12px;
+    border: 1px solid rgba(90, 173, 172, 0.3);
+    border-radius: 20px;
+  }
+
+  .header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px, 5vw, 48px);
+    font-weight: 900;
+    color: var(--white);
+    line-height: 1.1;
+    margin-bottom: 14px;
+  }
+
+  .header h1 span { color: var(--coral); }
+
+  .header p {
+    font-size: 15px;
+    color: var(--warm-grey);
+    max-width: 540px;
+    margin: 0 auto;
+    line-height: 1.6;
+    font-weight: 300;
+  }
+
+  /* FILTERS */
+  .filters-wrap {
+    background: var(--white);
+    border-bottom: 1px solid var(--card-border);
+    padding: 20px 24px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(61,58,54,0.06);
+  }
+
+  .filters-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .filter-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--mid);
+    white-space: nowrap;
+    margin-right: 4px;
+  }
+
+  .pill {
     padding: 6px 14px;
-    border-radius: 8px;
-    border: 1px solid #ddd;
-    background: #fff;
-    color: #555;
+    border-radius: 20px;
+    border: 1.5px solid var(--card-border);
+    background: var(--white);
+    font-size: 12.5px;
+    font-weight: 500;
+    color: var(--mid);
     cursor: pointer;
-    transition: all 0.15s;
+    transition: all 0.15s ease;
+    white-space: nowrap;
+    font-family: 'DM Sans', sans-serif;
   }
-  .filter-btn:hover { background: #f5f5f5; }
-  .filter-btn.active {
-    background: #5AADAC;
-    color: #fff;
-    border-color: #5AADAC;
+
+  .pill:hover { border-color: var(--teal); color: var(--dark); }
+  .pill.active { background: var(--dark); border-color: var(--dark); color: var(--white); }
+
+  .reset-btn {
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1.5px solid var(--coral);
+    background: transparent;
+    font-size: 12.5px;
+    font-weight: 500;
+    color: var(--coral);
+    cursor: pointer;
+    transition: all 0.15s ease;
+    font-family: 'DM Sans', sans-serif;
+    margin-left: auto;
   }
-  .count { font-size: 13px; color: #888; margin-bottom: 16px; }
-  .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; }
+
+  .reset-btn:hover { background: var(--coral); color: white; }
+
+  /* RESULTS BAR */
+  .results-bar {
+    max-width: 1100px;
+    margin: 24px auto 0;
+    padding: 0 24px;
+  }
+
+  .results-count {
+    font-size: 13px;
+    color: var(--mid);
+  }
+
+  .results-count strong {
+    color: var(--dark);
+    font-weight: 600;
+  }
+
+  /* GRID */
+  .grid {
+    max-width: 1100px;
+    margin: 20px auto 60px;
+    padding: 0 24px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 16px;
+  }
+
+  /* CARD */
   .card {
-    background: #fff;
-    border: 1px solid #e8e8e8;
+    background: var(--white);
+    border: 1px solid var(--card-border);
     border-radius: 12px;
-    padding: 16px;
+    padding: 20px;
     display: flex;
     flex-direction: column;
+    gap: 12px;
+    transition: all 0.2s ease;
+    animation: fadeUp 0.3s ease forwards;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .card:hover {
+    border-color: var(--teal);
+    box-shadow: 0 4px 20px rgba(90, 173, 172, 0.12);
+    transform: translateY(-2px);
+  }
+
+  .card-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
     gap: 10px;
   }
-  .card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
-  .card-name { font-size: 15px; font-weight: 600; color: #3A3834; }
+
+  .card-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--dark);
+    line-height: 1.2;
+  }
+
   .tier-badge {
-    font-size: 11px;
-    padding: 3px 8px;
-    border-radius: 6px;
+    font-size: 10.5px;
+    padding: 3px 9px;
+    border-radius: 20px;
     white-space: nowrap;
     flex-shrink: 0;
-    font-weight: 500;
+    font-weight: 600;
+    letter-spacing: 0.03em;
   }
-  .tier-1 { background: #E1F5EE; color: #0F6E56; }
-  .tier-2 { background: #FFF3DC; color: #854F0B; }
-  .tier-3 { background: #E6F1FB; color: #185FA5; }
-  .best-for { font-size: 13px; color: #444; line-height: 1.5; }
-  .best-for strong { color: #1a1a1a; font-weight: 600; }
-  .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+
+  .tier-1 { background: #d4f0ef; color: #1a7a79; }
+  .tier-2 { background: #fff3cd; color: #856404; }
+  .tier-3 { background: #e8f0fb; color: #2a4f9a; }
+
+  .best-for {
+    font-size: 13px;
+    color: var(--mid);
+    line-height: 1.55;
+  }
+
+  .best-for strong {
+    color: var(--dark);
+    font-weight: 600;
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
   .tag {
     font-size: 11px;
-    padding: 3px 8px;
-    border-radius: 6px;
-    border: 1px solid #e8e8e8;
-    color: #666;
-    background: #f9f9f7;
+    padding: 3px 9px;
+    border-radius: 20px;
+    border: 1px solid var(--card-border);
+    color: var(--mid);
+    background: var(--light-bg);
+    font-weight: 500;
   }
+
   .note {
     font-size: 12px;
     color: #999;
-    line-height: 1.5;
-    border-top: 1px solid #f0f0f0;
-    padding-top: 10px;
+    line-height: 1.55;
+    border-top: 1px solid var(--card-border);
+    padding-top: 12px;
   }
-  .tier-divider {
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: #FF9588;
-    margin: 8px 0 4px;
+
+  /* NO RESULTS */
+  .no-results {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--mid);
+    display: none;
+  }
+
+  .no-results h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    color: var(--dark);
+    margin-bottom: 8px;
+  }
+
+  /* FOOTER */
+  .footer {
+    background: var(--dark);
+    padding: 32px 24px;
+    text-align: center;
+  }
+
+  .footer p {
+    font-size: 13px;
+    color: var(--warm-grey);
+    line-height: 1.7;
+  }
+
+  .footer strong { color: var(--coral); }
+
+  .footer a {
+    color: var(--teal);
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .footer a:hover { text-decoration: underline; }
+
+  @media (max-width: 600px) {
+    .grid { grid-template-columns: 1fr; }
   }
 </style>
 </head>
 <body>
 
-<h2>Find your platform</h2>
-<p class="subtitle">Filter by your situation to find the right job boards to start with.</p>
+<div class="header">
+  <div class="header-tag">The Balkan Renaissance</div>
+  <h1>Find Your <span>Job Board</span></h1>
+  <p>20 platforms — filtered by your situation. Find where to start without wasting weeks on listings that were never going to work for you.</p>
+</div>
 
-<div class="filters" id="filters"></div>
-<div class="count" id="count"></div>
-<div class="cards" id="cards"></div>
+<div class="filters-wrap">
+  <div class="filters-inner">
+    <span class="filter-label">Filter by</span>
+    <div id="filters"></div>
+    <button class="reset-btn" id="reset-btn">Reset</button>
+  </div>
+</div>
+
+<div class="results-bar">
+  <p class="results-count"><strong id="count"></strong></p>
+</div>
+
+<div class="grid" id="cards">
+  <div class="no-results" id="no-results">
+    <h3>No platforms match</h3>
+    <p>Try adjusting your filters or reset to see all platforms.</p>
+  </div>
+</div>
+
+<div class="footer">
+  <p>Built by <strong>The Balkan Renaissance</strong> · The community for people building a remote life in the Balkans & Mediterranean.<br>
+  <a href="https://www.skool.com/the-balkan-renaissance-5529/about">Join Renaissance →</a></p>
+</div>
 
 <script>
 const boards = [
@@ -139,12 +382,15 @@ filterDefs.forEach(f => tagLabels[f.tag] = f.label);
 let active = new Set();
 
 const filtersEl = document.getElementById("filters");
+filtersEl.style.cssText = "display:flex;flex-wrap:wrap;gap:8px;align-items:center;flex:1;";
+
 const cardsEl = document.getElementById("cards");
 const countEl = document.getElementById("count");
+const noResults = document.getElementById("no-results");
 
 filterDefs.forEach(({ tag, label }) => {
   const btn = document.createElement("button");
-  btn.className = "filter-btn";
+  btn.className = "pill";
   btn.textContent = label;
   btn.dataset.tag = tag;
   btn.onclick = () => {
@@ -155,12 +401,27 @@ filterDefs.forEach(({ tag, label }) => {
   filtersEl.appendChild(btn);
 });
 
+document.getElementById("reset-btn").onclick = () => {
+  active.clear();
+  filtersEl.querySelectorAll(".pill").forEach(p => p.classList.remove("active"));
+  render();
+};
+
 function render() {
   const visible = boards.filter(b => active.size === 0 || [...active].every(t => b.tags.includes(t)));
   countEl.textContent = active.size === 0
     ? "Showing all " + boards.length + " platforms"
     : visible.length + " platform" + (visible.length !== 1 ? "s" : "") + " match your filters";
-  cardsEl.innerHTML = "";
+
+  // Remove old cards but keep no-results
+  cardsEl.querySelectorAll(".card").forEach(c => c.remove());
+
+  if (visible.length === 0) {
+    noResults.style.display = "block";
+    return;
+  }
+  noResults.style.display = "none";
+
   visible.forEach(b => {
     const card = document.createElement("div");
     card.className = "card";
@@ -174,7 +435,7 @@ function render() {
       <div class="tags">${tagHTML}</div>
       <div class="note">${b.note}</div>
     `;
-    cardsEl.appendChild(card);
+    cardsEl.insertBefore(card, noResults);
   });
 }
 
