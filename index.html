@@ -2,444 +2,777 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Remote Job Board Finder — Renaissance</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Remote Job Board Finder — The Balkan Renaissance</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --cream: #EFE9DE;
-    --warm-grey: #C7C3C1;
-    --coral: #FF9588;
-    --teal: #5AADAC;
-    --dark: #3d3a36;
-    --mid: #6b6560;
-    --light-bg: #f9f6f1;
-    --white: #ffffff;
-    --card-border: #e8e2d8;
-  }
+html, body, div, span, h1, h2, h3, h4, p, a, button {
+  font-family: inherit; font-size: inherit; line-height: inherit;
+  color: inherit; margin: 0; padding: 0; border: 0; outline: 0;
+  vertical-align: baseline; background: transparent;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { font-size: 16px !important; }
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: #1C1610 !important;
+  color: #F5EDE0 !important;
+  font-family: 'EB Garamond', Georgia, serif !important;
+  font-size: 16px !important;
+  min-height: 100vh;
+  line-height: 1.6 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow-x: hidden;
+  padding: 0 !important;
+  margin: 0 !important;
+}
 
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--light-bg);
-    color: var(--dark);
-    min-height: 100vh;
-  }
+.header {
+  text-align: center;
+  padding: 48px 5% 32px;
+  border-bottom: 2px solid #C4A882;
+  width: 100%;
+}
+.header h1 {
+  font-family: 'Cinzel', serif !important;
+  font-size: 32px !important;
+  color: #F5EDE0 !important;
+  letter-spacing: 0.15em;
+  margin-bottom: 8px;
+}
+.header p {
+  font-size: 17px !important;
+  color: rgba(196,168,130,0.6) !important;
+  font-style: italic;
+  max-width: 800px;
+  margin: 0 auto;
+}
 
-  /* HEADER */
-  .header {
-    background: var(--dark);
-    padding: 48px 24px 40px;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-  }
+.filters {
+  padding: 28px 5% 20px;
+  width: 100%;
+}
+.filter-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr 1fr;
+  gap: 28px;
+  align-items: start;
+}
+.filter-group { display: flex; flex-direction: column; gap: 8px; }
+.filter-label {
+  font-family: 'Cinzel', serif !important;
+  font-size: 11px !important;
+  letter-spacing: 0.15em;
+  color: #C4A882 !important;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.filter-options { display: flex; flex-wrap: wrap; gap: 6px; }
+.filter-btn {
+  font-family: 'EB Garamond', Georgia, serif !important;
+  font-size: 14px !important;
+  padding: 6px 14px !important;
+  border: 1px solid rgba(196,168,130,0.25) !important;
+  border-radius: 20px !important;
+  background: rgba(42,32,24,0.6) !important;
+  color: rgba(245,237,224,0.7) !important;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.filter-btn:hover { border-color: #C4A882 !important; color: #F5EDE0 !important; }
+.filter-btn.active {
+  background: rgba(196,168,130,0.15) !important;
+  border-color: #C4A882 !important;
+  color: #C4A882 !important;
+  font-weight: 600;
+}
 
-  .header::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 3px;
-    background: linear-gradient(to right, var(--coral), var(--teal));
-  }
+.reset-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 5% 16px;
+  width: 100%;
+}
+.role-count {
+  font-family: 'Cinzel', serif !important;
+  font-size: 13px !important;
+  color: rgba(196,168,130,0.5) !important;
+  letter-spacing: 0.1em;
+}
+.reset-btn {
+  font-family: 'Cinzel', serif !important;
+  font-size: 11px !important;
+  letter-spacing: 0.12em;
+  padding: 6px 18px !important;
+  border: 1px solid rgba(196,98,42,0.4) !important;
+  border-radius: 20px !important;
+  background: transparent !important;
+  color: #C4622A !important;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.reset-btn:hover { border-color: #C4622A !important; background: rgba(196,98,42,0.1) !important; }
 
-  .header-tag {
-    display: inline-block;
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--teal);
-    margin-bottom: 16px;
-    padding: 4px 12px;
-    border: 1px solid rgba(90, 173, 172, 0.3);
-    border-radius: 20px;
-  }
+.divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #C4A882, transparent);
+  margin: 0 5%;
+}
 
-  .header h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(28px, 5vw, 48px);
-    font-weight: 900;
-    color: var(--white);
-    line-height: 1.1;
-    margin-bottom: 14px;
-  }
+.boards-container {
+  padding: 24px 5%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  width: 100%;
+}
 
-  .header h1 span { color: var(--coral); }
+.board-card {
+  background: #2A2018;
+  border: 1px solid rgba(196,168,130,0.15);
+  border-radius: 8px;
+  padding: 24px 28px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+.board-card:hover { border-color: #C4622A; background: #332B20; box-shadow: 0 0 0 1px #C4622A; }
+.board-card.expanded { grid-column: 1 / -1; background: #332B20; border-color: #C4A882; }
 
-  .header p {
-    font-size: 15px;
-    color: var(--warm-grey);
-    max-width: 540px;
-    margin: 0 auto;
-    line-height: 1.6;
-    font-weight: 300;
-  }
+.board-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px; gap: 12px; }
+.board-name {
+  font-family: 'Cinzel', serif !important;
+  font-size: 17px !important;
+  color: #F5EDE0 !important;
+  letter-spacing: 0.08em;
+}
+.tier-badge {
+  font-family: 'Cinzel', serif !important;
+  font-size: 10px !important;
+  padding: 3px 10px;
+  border-radius: 12px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  letter-spacing: 0.08em;
+}
+.tier-1 { background: rgba(30,122,140,0.2); border: 1px solid rgba(30,122,140,0.4); color: #3AADC4 !important; }
+.tier-2 { background: rgba(196,168,130,0.12); border: 1px solid rgba(196,168,130,0.3); color: #C4A882 !important; }
+.tier-3 { background: rgba(92,122,62,0.15); border: 1px solid rgba(92,122,62,0.3); color: #8AAD6A !important; }
 
-  /* FILTERS */
-  .filters-wrap {
-    background: var(--white);
-    border-bottom: 1px solid var(--card-border);
-    padding: 20px 24px;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    box-shadow: 0 2px 12px rgba(61,58,54,0.06);
-  }
+.board-category { font-size: 13px !important; color: rgba(196,168,130,0.5) !important; font-style: italic; margin-bottom: 8px; }
+.board-desc { font-size: 15px !important; color: rgba(245,237,224,0.7) !important; margin-bottom: 12px; line-height: 1.5; }
 
-  .filters-inner {
-    max-width: 1100px;
-    margin: 0 auto;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    align-items: center;
-  }
+.board-meta { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.meta-tag { font-size: 13px !important; padding: 3px 10px !important; border-radius: 12px !important; white-space: nowrap; }
+.meta-cost-free { background: rgba(92,122,62,0.15); border: 1px solid rgba(92,122,62,0.3); color: #8AAD6A !important; }
+.meta-cost-freemium { background: rgba(196,168,130,0.12); border: 1px solid rgba(196,168,130,0.3); color: #C4A882 !important; }
+.meta-cost-paid { background: rgba(196,98,42,0.12); border: 1px solid rgba(196,98,42,0.3); color: #E08050 !important; }
+.meta-type { border: 1px solid rgba(196,168,130,0.2); color: rgba(245,237,224,0.6) !important; }
+.meta-link { background: rgba(30,122,140,0.15); border: 1px solid rgba(30,122,140,0.3); color: #3AADC4 !important; text-decoration: none; }
+.meta-link:hover { background: rgba(30,122,140,0.3) !important; }
 
-  .filter-label {
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--mid);
-    white-space: nowrap;
-    margin-right: 4px;
-  }
+.board-detail { display: none; margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(196,168,130,0.15); }
+.board-card.expanded .board-detail { display: block; }
 
-  .pill {
-    padding: 6px 14px;
-    border-radius: 20px;
-    border: 1.5px solid var(--card-border);
-    background: var(--white);
-    font-size: 12.5px;
-    font-weight: 500;
-    color: var(--mid);
-    cursor: pointer;
-    transition: all 0.15s ease;
-    white-space: nowrap;
-    font-family: 'DM Sans', sans-serif;
-  }
+.detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.detail-section { margin-bottom: 12px; }
+.detail-label {
+  font-family: 'Cinzel', serif !important;
+  font-size: 11px !important;
+  letter-spacing: 0.12em;
+  color: #C4A882 !important;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.detail-value { font-size: 15px !important; color: rgba(245,237,224,0.8) !important; line-height: 1.5; }
+.pro-con-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 4px; }
+.pro-list, .con-list { list-style: none; }
+.pro-list li::before { content: "✓ "; color: #8AAD6A; }
+.con-list li::before { content: "✗ "; color: #C4622A; }
+.pro-list li, .con-list li { font-size: 14px !important; color: rgba(245,237,224,0.75) !important; margin-bottom: 4px; line-height: 1.4; }
 
-  .pill:hover { border-color: var(--teal); color: var(--dark); }
-  .pill.active { background: var(--dark); border-color: var(--dark); color: var(--white); }
+.visit-btn {
+  display: inline-block;
+  margin-top: 14px;
+  font-family: 'Cinzel', serif !important;
+  font-size: 12px !important;
+  letter-spacing: 0.12em;
+  padding: 9px 24px;
+  background: linear-gradient(135deg, #C4A882, #E8D8B8, #C4A882);
+  color: #1C1610 !important;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+.visit-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 14px rgba(196,168,130,0.3); }
 
-  .reset-btn {
-    padding: 6px 14px;
-    border-radius: 20px;
-    border: 1.5px solid var(--coral);
-    background: transparent;
-    font-size: 12.5px;
-    font-weight: 500;
-    color: var(--coral);
-    cursor: pointer;
-    transition: all 0.15s ease;
-    font-family: 'DM Sans', sans-serif;
-    margin-left: auto;
-  }
+.click-hint { font-size: 12px !important; color: rgba(196,168,130,0.3) !important; font-style: italic; text-align: right; margin-top: 4px; }
 
-  .reset-btn:hover { background: var(--coral); color: white; }
+.no-results {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 60px 24px;
+  color: rgba(196,168,130,0.4) !important;
+  font-style: italic;
+  font-size: 16px !important;
+}
 
-  /* RESULTS BAR */
-  .results-bar {
-    max-width: 1100px;
-    margin: 24px auto 0;
-    padding: 0 24px;
-  }
+.footer {
+  text-align: center;
+  padding: 32px 5%;
+  border-top: 1px solid rgba(196,168,130,0.15);
+  width: 100%;
+}
+.footer p { font-family: 'Cinzel', serif !important; font-size: 12px !important; color: rgba(196,168,130,0.3) !important; letter-spacing: 0.1em; }
 
-  .results-count {
-    font-size: 13px;
-    color: var(--mid);
-  }
-
-  .results-count strong {
-    color: var(--dark);
-    font-weight: 600;
-  }
-
-  /* GRID */
-  .grid {
-    max-width: 1100px;
-    margin: 20px auto 60px;
-    padding: 0 24px;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 16px;
-  }
-
-  /* CARD */
-  .card {
-    background: var(--white);
-    border: 1px solid var(--card-border);
-    border-radius: 12px;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    transition: all 0.2s ease;
-    animation: fadeUp 0.3s ease forwards;
-  }
-
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(8px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  .card:hover {
-    border-color: var(--teal);
-    box-shadow: 0 4px 20px rgba(90, 173, 172, 0.12);
-    transform: translateY(-2px);
-  }
-
-  .card-top {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 10px;
-  }
-
-  .card-name {
-    font-family: 'Playfair Display', serif;
-    font-size: 17px;
-    font-weight: 700;
-    color: var(--dark);
-    line-height: 1.2;
-  }
-
-  .tier-badge {
-    font-size: 10.5px;
-    padding: 3px 9px;
-    border-radius: 20px;
-    white-space: nowrap;
-    flex-shrink: 0;
-    font-weight: 600;
-    letter-spacing: 0.03em;
-  }
-
-  .tier-1 { background: #d4f0ef; color: #1a7a79; }
-  .tier-2 { background: #fff3cd; color: #856404; }
-  .tier-3 { background: #e8f0fb; color: #2a4f9a; }
-
-  .best-for {
-    font-size: 13px;
-    color: var(--mid);
-    line-height: 1.55;
-  }
-
-  .best-for strong {
-    color: var(--dark);
-    font-weight: 600;
-  }
-
-  .tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-  }
-
-  .tag {
-    font-size: 11px;
-    padding: 3px 9px;
-    border-radius: 20px;
-    border: 1px solid var(--card-border);
-    color: var(--mid);
-    background: var(--light-bg);
-    font-weight: 500;
-  }
-
-  .note {
-    font-size: 12px;
-    color: #999;
-    line-height: 1.55;
-    border-top: 1px solid var(--card-border);
-    padding-top: 12px;
-  }
-
-  /* NO RESULTS */
-  .no-results {
-    grid-column: 1 / -1;
-    text-align: center;
-    padding: 60px 20px;
-    color: var(--mid);
-    display: none;
-  }
-
-  .no-results h3 {
-    font-family: 'Playfair Display', serif;
-    font-size: 22px;
-    color: var(--dark);
-    margin-bottom: 8px;
-  }
-
-  /* FOOTER */
-  .footer {
-    background: var(--dark);
-    padding: 32px 24px;
-    text-align: center;
-  }
-
-  .footer p {
-    font-size: 13px;
-    color: var(--warm-grey);
-    line-height: 1.7;
-  }
-
-  .footer strong { color: var(--coral); }
-
-  .footer a {
-    color: var(--teal);
-    text-decoration: none;
-    font-weight: 500;
-  }
-
-  .footer a:hover { text-decoration: underline; }
-
-  @media (max-width: 600px) {
-    .grid { grid-template-columns: 1fr; }
-  }
+@media (max-width: 1024px) {
+  .boards-container { grid-template-columns: 1fr; }
+  .board-card.expanded { grid-column: 1; }
+  .detail-grid { grid-template-columns: 1fr; }
+  .pro-con-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 768px) {
+  .filter-grid { grid-template-columns: 1fr 1fr; gap: 16px; }
+  .header h1 { font-size: 24px !important; }
+}
+@media (max-width: 480px) {
+  .filter-grid { grid-template-columns: 1fr; }
+}
 </style>
 </head>
 <body>
 
 <div class="header">
-  <div class="header-tag">The Balkan Renaissance</div>
-  <h1>Find Your <span>Job Board</span></h1>
-  <p>20 platforms — filtered by your situation. Find where to start without wasting weeks on listings that were never going to work for you.</p>
+  <h1>Remote Job Board Finder</h1>
+  <p>24 platforms filtered by your situation. Find where to search without wasting weeks on listings that were never going to work for you. Click any card to expand full details.</p>
 </div>
 
-<div class="filters-wrap">
-  <div class="filters-inner">
-    <span class="filter-label">Filter by</span>
-    <div id="filters"></div>
-    <button class="reset-btn" id="reset-btn">Reset</button>
+<div class="filters">
+  <div class="filter-grid">
+    <div class="filter-group">
+      <div class="filter-label">Type</div>
+      <div class="filter-options">
+        <button class="filter-btn active" data-filter="type" data-value="all">All</button>
+        <button class="filter-btn" data-filter="type" data-value="jobboard">📋 Job Board</button>
+        <button class="filter-btn" data-filter="type" data-value="freelance">🎯 Freelance</button>
+        <button class="filter-btn" data-filter="type" data-value="research">🔍 Research</button>
+        <button class="filter-btn" data-filter="type" data-value="vetted">✅ Vetted/Exclusive</button>
+      </div>
+    </div>
+    <div class="filter-group">
+      <div class="filter-label">Cost</div>
+      <div class="filter-options">
+        <button class="filter-btn active" data-filter="cost" data-value="all">All</button>
+        <button class="filter-btn" data-filter="cost" data-value="free">🟢 Free</button>
+        <button class="filter-btn" data-filter="cost" data-value="freemium">🟡 Freemium</button>
+        <button class="filter-btn" data-filter="cost" data-value="paid">🔴 Paid</button>
+      </div>
+    </div>
+    <div class="filter-group">
+      <div class="filter-label">Experience</div>
+      <div class="filter-options">
+        <button class="filter-btn active" data-filter="exp" data-value="all">All</button>
+        <button class="filter-btn" data-filter="exp" data-value="entry">Entry level</button>
+        <button class="filter-btn" data-filter="exp" data-value="mid">Mid level</button>
+        <button class="filter-btn" data-filter="exp" data-value="senior">Senior</button>
+      </div>
+    </div>
+    <div class="filter-group">
+      <div class="filter-label">Special</div>
+      <div class="filter-options">
+        <button class="filter-btn active" data-filter="special" data-value="all">All</button>
+        <button class="filter-btn" data-filter="special" data-value="novisa">🌍 No visa needed</button>
+        <button class="filter-btn" data-filter="special" data-value="async">⏱️ Async-first</button>
+        <button class="filter-btn" data-filter="special" data-value="relocating">✈️ Relocating</button>
+        <button class="filter-btn" data-filter="special" data-value="techonly">💻 Tech only</button>
+        <button class="filter-btn" data-filter="special" data-value="nontech">🗂️ Non-tech</button>
+        <button class="filter-btn" data-filter="special" data-value="sixfig">💰 $100k+</button>
+      </div>
+    </div>
   </div>
 </div>
 
-<div class="results-bar">
-  <p class="results-count"><strong id="count"></strong></p>
+<div class="reset-bar">
+  <span class="role-count" id="boardCount">24 platforms found</span>
+  <button class="reset-btn" onclick="resetFilters()">Reset</button>
 </div>
+<div class="divider"></div>
 
-<div class="grid" id="cards">
-  <div class="no-results" id="no-results">
-    <h3>No platforms match</h3>
-    <p>Try adjusting your filters or reset to see all platforms.</p>
-  </div>
-</div>
+<div class="boards-container" id="boardsContainer"></div>
 
 <div class="footer">
-  <p>Built by <strong>The Balkan Renaissance</strong> · The community for people building a remote life in the Balkans & Mediterranean.<br>
-  <a href="https://www.skool.com/the-balkan-renaissance-5529/about">Join Renaissance →</a></p>
+  <p>The Balkan Renaissance · Remote Job Board Finder</p>
 </div>
 
 <script>
 const boards = [
-  { name: "Real Work From Anywhere", tier: 1, tags: ["entry", "mid", "senior", "tech", "marketing", "customer support", "no visa", "relocating"], bestFor: "Anyone who wants guaranteed WFA — every listing is hand-picked, zero location restrictions.", note: "The only board that explicitly guarantees every listing is truly worldwide." },
-  { name: "Working Nomads", tier: 1, tags: ["entry", "mid", "relocating", "nomad", "non-tech", "tech"], bestFor: "People relocating to the Balkans — built with timezone flexibility and travel in mind.", note: "One of the few boards that actively filters for timezone flexibility, not just 'remote'." },
-  { name: "We Work Remotely", tier: 1, tags: ["mid", "senior", "design", "marketing", "tech", "customer support"], bestFor: "Mid-level professionals across design, marketing, customer support, and programming.", note: "Companies here are genuinely remote-first — better work environments as a result." },
-  { name: "Remote.co", tier: 1, tags: ["entry", "mid", "writing", "project management", "tech", "customer support"], bestFor: "Broad range — especially writing, customer service, and project management.", note: "Every listing reviewed. Strong educational resources — great for first-timers." },
-  { name: "Jobspresso", tier: 1, tags: ["mid", "senior", "writing", "marketing", "tech", "design"], bestFor: "Quality over quantity — highly curated and scam-free.", note: "Upload your CV — recruiters can find you directly." },
-  { name: "JustRemote", tier: 1, tags: ["entry", "mid", "non-tech", "first-time"], bestFor: "First-time remote job seekers who want a clean, simple search.", note: "Best starting point before moving to larger, noisier boards." },
-  { name: "NoDesk", tier: 1, tags: ["mid", "senior", "research", "all fields"], bestFor: "People who want to research companies thoroughly before applying.", note: "Listings + company profiles + guides — use in your research phase." },
-  { name: "Remote OK", tier: 2, tags: ["entry", "mid", "senior", "tech", "design", "marketing", "customer support"], bestFor: "Broad search with salary transparency — always filter for the 'worldwide' tag.", note: "Companies hiding pay often hide location requirements too — filter hard." },
-  { name: "FlexJobs", tier: 2, tags: ["mid", "senior", "verified", "all fields"], bestFor: "Serious job seekers wanting verified, scam-free listings.", note: "Paid (~$15/mo) — worth it if remote work is your primary focus." },
-  { name: "Himalayas", tier: 2, tags: ["mid", "senior", "tech", "timezone"], bestFor: "Tech and adjacent roles where timezone and company culture matter.", note: "Advanced timezone and work permit filters — one of the most transparent boards." },
-  { name: "DailyRemote", tier: 2, tags: ["entry", "mid", "non-tech", "healthcare", "education", "admin"], bestFor: "Non-tech roles — healthcare, education, admin — underrepresented elsewhere.", note: "50k+ listings updated daily. Covers sectors most boards miss." },
-  { name: "LinkedIn Jobs", tier: 2, tags: ["mid", "senior", "networking", "all fields"], bestFor: "Professionals using networking as their primary strategy.", note: "Search 'worldwide / async / distributed'. Real power is warm outreach, not cold applying." },
-  { name: "Wellfound", tier: 3, tags: ["mid", "senior", "tech", "product", "startup"], bestFor: "Tech and product professionals comfortable with startup risk.", note: "Startups often more flexible on location than established corporates." },
-  { name: "Arc", tier: 3, tags: ["mid", "senior", "developers", "tech"], bestFor: "Software developers exclusively — vetted companies, strong salaries.", note: "Competitive vetting but one of the strongest platforms for developers." },
-  { name: "Remote100k", tier: 3, tags: ["senior", "6-figure", "all fields"], bestFor: "Experienced professionals targeting $100k+ senior roles only.", note: "Not a starting point — only if you have 5+ years experience to back it up." },
-  { name: "Built In", tier: 3, tags: ["mid", "senior", "tech", "research"], bestFor: "Tech professionals who want deep company context and salary data.", note: "Better for research than pure job hunting — cross-reference with WFA boards." },
-  { name: "No Visa Jobs", tier: 3, tags: ["entry", "mid", "no visa", "relocating", "international"], bestFor: "Non-US/UK/EU audience relocating — no visa sponsorship needed.", note: "Built precisely for people in this community's situation." },
-  { name: "FindAsync", tier: 3, tags: ["mid", "senior", "async", "timezone"], bestFor: "Anyone wanting to confirm a company is truly async before applying.", note: "If a company is here, they have committed to timezone freedom." },
-  { name: "Jobgether", tier: 3, tags: ["entry", "mid", "guided", "all fields"], bestFor: "People who feel overwhelmed and want AI-matching and guided support.", note: "Built-in CV and LinkedIn optimisation — more hand-holding through the process." },
-  { name: "Contra", tier: 3, tags: ["entry", "mid", "freelance", "design", "writing", "marketing", "tech"], bestFor: "Freelancers who want to keep 100% of earnings — zero commission.", note: "Most platforms take 10–20%. Contra takes none. Great for building a client base." },
+  {
+    name: "We Work Remotely",
+    tier: 1, tierLabel: "Tier 1 — Curated",
+    type: "jobboard", typeLabel: "Job Board",
+    cost: "freemium", costLabel: "Freemium (Pro $14.95/mo)",
+    exp: ["entry","mid","senior"],
+    special: ["relocating"],
+    url: "https://weworkremotely.com",
+    desc: "One of the largest and most established remote job boards. Strong across design, marketing, customer support, and programming. Companies posting here are genuinely remote-first.",
+    bestFor: "Mid-level professionals across design, marketing, customer support, and programming.",
+    roles: "Design, Marketing, Customer Support, Programming, DevOps, Writing",
+    pros: ["Genuinely remote-first companies", "Large volume of daily listings", "Strong brand recognition means quality employers"],
+    cons: ["Lots of competition per listing", "US-heavy but global listings available", "No salary transparency by default"],
+    note: "Companies here have committed to remote work as a culture, not just a perk. Better work environments as a result."
+  },
+  {
+    name: "Working Nomads",
+    tier: 1, tierLabel: "Tier 1 — Curated",
+    type: "jobboard", typeLabel: "Job Board",
+    cost: "freemium", costLabel: "Freemium (Premium available)",
+    exp: ["entry","mid"],
+    special: ["relocating","async"],
+    url: "https://www.workingnomads.com",
+    desc: "Built with timezone flexibility and travel in mind. One of the few boards that actively filters for timezone flexibility, not just 'remote'. Ideal for people relocating to the Balkans.",
+    bestFor: "People relocating to the Balkans who need genuine timezone flexibility.",
+    roles: "Tech, Marketing, Design, Customer Support, Writing",
+    pros: ["Timezone flexibility filter is genuinely useful", "Built for nomads not just remote workers", "Daily digest email keeps you updated"],
+    cons: ["Smaller volume than WWR or LinkedIn", "Less brand recognition with employers"],
+    note: "One of the few boards that actively filters for timezone flexibility, not just 'remote'."
+  },
+  {
+    name: "Remote.co",
+    tier: 1, tierLabel: "Tier 1 — Curated",
+    type: "jobboard", typeLabel: "Job Board",
+    cost: "freemium", costLabel: "Freemium (some features gated)",
+    exp: ["entry","mid"],
+    special: ["nontech","relocating"],
+    url: "https://remote.co",
+    desc: "Every listing is reviewed before going live. Strong for writing, customer service, and project management. Excellent educational resources make it ideal for first-time remote job seekers.",
+    bestFor: "First-time remote seekers, writers, customer service roles, project management.",
+    roles: "Writing, Customer Support, Project Management, Tech, Admin",
+    pros: ["Every listing manually reviewed", "Great educational resources for beginners", "Strong non-tech selection"],
+    cons: ["Smaller volume of listings", "Less useful for senior tech roles"],
+    note: "Best starting point if you've never applied for a remote role before."
+  },
+  {
+    name: "Real Work From Anywhere",
+    tier: 1, tierLabel: "Tier 1 — Curated",
+    type: "jobboard", typeLabel: "Job Board",
+    cost: "free", costLabel: "Free",
+    exp: ["entry","mid","senior"],
+    special: ["novisa","relocating","async"],
+    url: "https://www.realworkfromanywhere.com",
+    desc: "The only board that explicitly guarantees every listing is truly worldwide with zero location restrictions. Hand-picked listings only. Built exactly for people in this community's situation.",
+    bestFor: "Anyone who wants guaranteed WFA — every listing is hand-picked, zero location restrictions.",
+    roles: "Tech, Marketing, Customer Support, Design, Writing",
+    pros: ["100% guaranteed worldwide listings", "Zero location restrictions on every role", "Hand-picked quality over volume"],
+    cons: ["Smaller number of daily listings", "Less known to employers"],
+    note: "The only board that explicitly guarantees every listing is truly worldwide."
+  },
+  {
+    name: "Jobspresso",
+    tier: 1, tierLabel: "Tier 1 — Curated",
+    type: "jobboard", typeLabel: "Job Board",
+    cost: "free", costLabel: "Free",
+    exp: ["mid","senior"],
+    special: ["relocating"],
+    url: "https://jobspresso.co",
+    desc: "Quality over quantity. Highly curated and scam-free. You can also upload your CV so recruiters can find you directly — a passive job search channel most people miss.",
+    bestFor: "Quality-focused job seekers who want curated listings and recruiter visibility.",
+    roles: "Writing, Marketing, Tech, Design",
+    pros: ["Curated and scam-free", "Recruiters can find you via CV upload", "High quality over high volume"],
+    cons: ["Limited volume of daily listings", "Less useful for entry-level"],
+    note: "Upload your CV — recruiters can find you directly."
+  },
+  {
+    name: "JustRemote",
+    tier: 1, tierLabel: "Tier 1 — Curated",
+    type: "jobboard", typeLabel: "Job Board",
+    cost: "freemium", costLabel: "Freemium (PowerSearch $6/mo)",
+    exp: ["entry","mid"],
+    special: ["nontech","relocating"],
+    url: "https://justremote.co",
+    desc: "Clean, simple, and accessible. The best first board for someone who has never searched for a remote job. Straightforward search without the noise of larger platforms.",
+    bestFor: "First-time remote job seekers who want a clean, simple starting point.",
+    roles: "All fields, strong non-tech",
+    pros: ["Cleanest UI of any remote board", "Good for beginners", "No clutter or noise"],
+    cons: ["Smaller database", "Less filtering capability"],
+    note: "Best starting point before moving to larger, noisier boards."
+  },
+  {
+    name: "Remote OK",
+    tier: 1, tierLabel: "Tier 1 — Curated",
+    type: "jobboard", typeLabel: "Job Board",
+    cost: "freemium", costLabel: "Freemium (Premium $5/mo)",
+    exp: ["entry","mid","senior"],
+    special: ["relocating"],
+    url: "https://remoteok.com",
+    desc: "Broad search with salary transparency. One of the most visited remote job boards. Always filter for the 'worldwide' tag to avoid location-restricted listings disguised as remote.",
+    bestFor: "Broad search across all levels. Always filter for the worldwide tag.",
+    roles: "Tech, Design, Marketing, Customer Support, All fields",
+    pros: ["Very high volume of listings", "Salary transparency on many roles", "Good tech selection"],
+    cons: ["Many listings are US/EU only", "Must filter carefully for true WFA", "Companies hiding pay often hide location requirements too"],
+    note: "Filter hard. Companies hiding pay often hide location requirements too."
+  },
+  {
+    name: "Remotive",
+    tier: 1, tierLabel: "Tier 1 — Curated",
+    type: "jobboard", typeLabel: "Job Board",
+    cost: "free", costLabel: "Free",
+    exp: ["mid","senior"],
+    special: ["relocating","async"],
+    url: "https://remotive.com",
+    desc: "Curated remote jobs with a strong community behind it. Newsletter, Slack community, and job board combined. Particularly strong for tech and marketing professionals.",
+    bestFor: "Tech and marketing professionals who want community alongside job listings.",
+    roles: "Tech, Marketing, Design, Customer Support",
+    pros: ["Strong community and newsletter", "Curated quality listings", "Good for networking alongside job search"],
+    cons: ["Mid to senior skewed", "Not ideal for entry level"],
+    note: "The community and newsletter add value beyond the job board itself."
+  },
+  {
+    name: "Himalayas",
+    tier: 2, tierLabel: "Tier 2 — Broad",
+    type: "jobboard", typeLabel: "Job Board",
+    cost: "free", costLabel: "Free",
+    exp: ["mid","senior"],
+    special: ["async","relocating"],
+    url: "https://himalayas.app",
+    desc: "Advanced timezone and work permit filters make this one of the most transparent boards available. Strong for tech and adjacent roles where company culture matters.",
+    bestFor: "Tech and adjacent roles where timezone and company culture matter.",
+    roles: "Tech, Product, Design, Marketing",
+    pros: ["Advanced timezone filters", "Work permit and visa filters", "Detailed company profiles"],
+    cons: ["Smaller volume", "Tech and product heavy"],
+    note: "One of the most transparent boards on work location requirements."
+  },
+  {
+    name: "LinkedIn Jobs",
+    tier: 2, tierLabel: "Tier 2 — Broad",
+    type: "jobboard", typeLabel: "Job Board",
+    cost: "freemium", costLabel: "Freemium",
+    exp: ["mid","senior"],
+    special: ["relocating"],
+    url: "https://www.linkedin.com/jobs",
+    desc: "The largest professional network. Real power is warm outreach, not cold applying. Search 'worldwide / async / distributed' and filter aggressively. Premium unlocks InMail and extra applicant insights.",
+    bestFor: "Professionals using networking as their primary strategy.",
+    roles: "All fields",
+    pros: ["Largest volume of any platform", "Warm outreach is far more effective than cold applying", "Company insights and employee connections"],
+    cons: ["High competition on every listing", "Many listings are not truly remote", "Must filter aggressively"],
+    note: "Real power is warm outreach, not cold applying. Premium ($30-40/mo) worth it if job hunting is your full-time focus."
+  },
+  {
+    name: "FlexJobs",
+    tier: 2, tierLabel: "Tier 2 — Broad",
+    type: "jobboard", typeLabel: "Job Board",
+    cost: "paid", costLabel: "Paid (~$15/mo)",
+    exp: ["mid","senior"],
+    special: ["nontech"],
+    url: "https://www.flexjobs.com",
+    desc: "Paid subscription gives you access to verified, scam-free listings across all fields. Worth the cost if remote work is your primary focus. Strong non-tech selection.",
+    bestFor: "Serious job seekers wanting verified, scam-free listings across all fields.",
+    roles: "All fields, strong non-tech",
+    pros: ["Every listing verified and scam-free", "Strong non-tech selection", "Job alerts and filtering tools"],
+    cons: ["Paid subscription required (~$15/mo)", "Worth it only if actively job hunting"],
+    note: "The paid model keeps listing quality high. Worth it for 1-3 months of active searching."
+  },
+  {
+    name: "DailyRemote",
+    tier: 2, tierLabel: "Tier 2 — Broad",
+    type: "jobboard", typeLabel: "Job Board",
+    cost: "free", costLabel: "Free",
+    exp: ["entry","mid"],
+    special: ["nontech"],
+    url: "https://dailyremote.com",
+    desc: "50k+ listings updated daily. Covers healthcare, education, admin, and other sectors that are underrepresented on most remote job boards.",
+    bestFor: "Non-tech roles — healthcare, education, admin — underrepresented elsewhere.",
+    roles: "Healthcare, Education, Admin, Non-tech, Tech",
+    pros: ["50k+ listings updated daily", "Covers sectors most boards miss", "Good for non-tech professionals"],
+    cons: ["Quality varies widely", "Less curation than Tier 1 boards"],
+    note: "Covers sectors most boards completely miss."
+  },
+  {
+    name: "NoDesk",
+    tier: 2, tierLabel: "Tier 2 — Broad",
+    type: "research", typeLabel: "Research Tool",
+    cost: "free", costLabel: "Free",
+    exp: ["mid","senior"],
+    special: ["relocating"],
+    url: "https://nodesk.co",
+    desc: "Listings combined with company profiles and remote work guides. Best used in the research phase before applying. Understand a company fully before you send anything.",
+    bestFor: "People who want to research companies thoroughly before applying.",
+    roles: "All fields",
+    pros: ["Company profiles alongside listings", "Remote work guides and resources", "Good for research phase"],
+    cons: ["Not a primary job search tool", "Smaller listing volume"],
+    note: "Use in your research phase. Listings + company profiles + guides."
+  },
+  {
+    name: "FindAsync",
+    tier: 2, tierLabel: "Tier 2 — Broad",
+    type: "research", typeLabel: "Research Tool",
+    cost: "free", costLabel: "Free",
+    exp: ["mid","senior"],
+    special: ["async","relocating"],
+    url: "https://www.findasync.com",
+    desc: "If a company is listed here, they have made a committed public statement about being async-first. Use it to vet companies before applying anywhere else.",
+    bestFor: "Anyone wanting to confirm a company is truly async before applying.",
+    roles: "All fields",
+    pros: ["Companies have committed to async publicly", "Confirms timezone freedom", "Good vetting tool"],
+    cons: ["Small database", "Use as a verification tool, not primary search"],
+    note: "If a company is here, they have committed to timezone freedom."
+  },
+  {
+    name: "Wellfound",
+    tier: 2, tierLabel: "Tier 2 — Broad",
+    type: "jobboard", typeLabel: "Job Board",
+    cost: "free", costLabel: "Free",
+    exp: ["mid","senior"],
+    special: ["relocating"],
+    url: "https://wellfound.com",
+    desc: "The main startup job board. Tech, product, and operations roles at early to growth-stage startups. Startups are often more flexible on location than established corporates.",
+    bestFor: "Tech and product professionals comfortable with startup risk.",
+    roles: "Tech, Product, Operations, Design, Marketing",
+    pros: ["Startup companies more flexible on location", "Salary and equity transparency", "Direct founder access"],
+    cons: ["Startup risk and instability", "Most roles are mid to senior", "US startups dominate"],
+    note: "Startups often more flexible on location than established corporates."
+  },
+  {
+    name: "No Visa Jobs",
+    tier: 2, tierLabel: "Tier 2 — Broad",
+    type: "jobboard", typeLabel: "Job Board",
+    cost: "free", costLabel: "Free",
+    exp: ["entry","mid"],
+    special: ["novisa","relocating"],
+    url: "https://novisajobs.com",
+    desc: "Built precisely for non-US/UK/EU candidates who need roles with no visa sponsorship requirement. Directly relevant to this community.",
+    bestFor: "Non-US/UK/EU audience relocating — no visa sponsorship needed.",
+    roles: "All fields",
+    pros: ["Built for the exact situation this community faces", "No visa sponsorship required for all listings", "Global-first approach"],
+    cons: ["Smaller volume", "Less known to employers"],
+    note: "Built precisely for people in this community's situation."
+  },
+  {
+    name: "Jobgether",
+    tier: 2, tierLabel: "Tier 2 — Broad",
+    type: "jobboard", typeLabel: "Job Board",
+    cost: "freemium", costLabel: "Freemium",
+    exp: ["entry","mid"],
+    special: ["relocating"],
+    url: "https://jobgether.com",
+    desc: "AI-matching and guided support built into the platform. CV and LinkedIn optimisation included. More hand-holding through the process than any other board.",
+    bestFor: "People who feel overwhelmed and want AI-matching and guided support.",
+    roles: "All fields",
+    pros: ["AI job matching reduces wasted applications", "Built-in CV and LinkedIn optimisation", "Guided process for beginners"],
+    cons: ["Premium features cost extra", "Smaller listing volume"],
+    note: "More hand-holding through the process than any other board."
+  },
+  {
+    name: "Pangian",
+    tier: 2, tierLabel: "Tier 2 — Broad",
+    type: "jobboard", typeLabel: "Job Board",
+    cost: "free", costLabel: "Free",
+    exp: ["entry","mid"],
+    special: ["novisa","relocating"],
+    url: "https://pangian.com",
+    desc: "Specifically built for international remote workers. Strong focus on non-US candidates. Community features alongside job listings make it good for networking.",
+    bestFor: "International candidates who want a community alongside their job search.",
+    roles: "All fields",
+    pros: ["Built for international candidates", "Community and networking features", "Good for non-US job seekers"],
+    cons: ["Smaller than major boards", "Less employer recognition"],
+    note: "One of the most internationally focused boards available."
+  },
+  {
+    name: "Arc",
+    tier: 3, tierLabel: "Tier 3 — Niche",
+    type: "vetted", typeLabel: "Vetted/Exclusive",
+    cost: "free", costLabel: "Free",
+    exp: ["mid","senior"],
+    special: ["techonly"],
+    url: "https://arc.dev",
+    desc: "Software developers exclusively. Vetted companies, strong salaries. Competitive vetting process but one of the strongest platforms for developers who pass.",
+    bestFor: "Software developers exclusively — vetted companies, strong salaries.",
+    roles: "Software Development only",
+    pros: ["Vetted companies ensure quality", "Strong salaries for developers", "Serious platform with committed employers"],
+    cons: ["Developers only", "Competitive vetting to get listed as a candidate", "Not entry-level friendly"],
+    note: "Competitive vetting but one of the strongest platforms for developers."
+  },
+  {
+    name: "Turing",
+    tier: 3, tierLabel: "Tier 3 — Niche",
+    type: "vetted", typeLabel: "Vetted/Exclusive",
+    cost: "free", costLabel: "Free",
+    exp: ["mid","senior"],
+    special: ["techonly"],
+    url: "https://www.turing.com",
+    desc: "AI-vetted developer platform that matches developers with US companies. Rigorous technical assessment upfront, but once you pass, you have access to well-paying US remote roles.",
+    bestFor: "Experienced developers who want access to well-paying US remote roles.",
+    roles: "Software Development only",
+    pros: ["Access to well-paying US companies", "Once vetted, recurring opportunities", "Strong reputation with US employers"],
+    cons: ["Rigorous technical assessment required", "Developers only", "Takes a percentage of earnings"],
+    note: "The assessment is tough but the reward is access to US-level salaries."
+  },
+  {
+    name: "Remote100k",
+    tier: 3, tierLabel: "Tier 3 — Niche",
+    type: "jobboard", typeLabel: "Job Board",
+    cost: "free", costLabel: "Free",
+    exp: ["senior"],
+    special: ["sixfig"],
+    url: "https://remote100k.com",
+    desc: "Exclusively senior roles paying $100k+. Not a starting point. Only relevant if you have 5+ years of demonstrable experience to back up your application.",
+    bestFor: "Experienced professionals targeting $100k+ senior roles only.",
+    roles: "All fields, senior only",
+    pros: ["100k+ salary floor on all listings", "High-quality senior employers", "No entry-level noise"],
+    cons: ["Not for beginners", "Small volume of listings", "5+ years experience required"],
+    note: "Only if you have 5+ years experience to back it up."
+  },
+  {
+    name: "Deel Jobs",
+    tier: 3, tierLabel: "Tier 3 — Niche",
+    type: "jobboard", typeLabel: "Job Board",
+    cost: "free", costLabel: "Free",
+    exp: ["mid","senior"],
+    special: ["novisa","relocating"],
+    url: "https://www.deel.com/jobs",
+    desc: "Companies hiring through Deel have already solved international contractor compliance. That means they're genuinely prepared to hire you regardless of your location. Growing fast.",
+    bestFor: "International candidates who want companies already set up to hire globally.",
+    roles: "All fields",
+    pros: ["Companies already set up for international hiring", "No visa sponsorship issues", "Compliant international contracts"],
+    cons: ["Growing but still smaller volume", "Deel charges companies, not candidates"],
+    note: "If a company uses Deel, they're set up to hire you compliantly wherever you are."
+  },
+  {
+    name: "Upwork",
+    tier: 3, tierLabel: "Tier 3 — Niche",
+    type: "freelance", typeLabel: "Freelance",
+    cost: "freemium", costLabel: "Freemium (20% commission)",
+    exp: ["entry","mid","senior"],
+    special: ["nontech","relocating"],
+    url: "https://www.upwork.com",
+    desc: "The largest freelance marketplace. High volume but high competition and 20% commission on early earnings. Use it to build initial client relationships, then take those clients off-platform.",
+    bestFor: "Freelancers starting out who need volume of opportunities to build a track record.",
+    roles: "All fields, strong for writing, design, marketing, dev",
+    pros: ["Largest freelance marketplace", "Low barrier to start", "Good for building early track record"],
+    cons: ["20% commission on first $500 with each client", "Highly competitive", "Race to the bottom on pricing early on"],
+    note: "Use it to build initial client relationships, then take those clients off-platform."
+  },
+  {
+    name: "Contra",
+    tier: 3, tierLabel: "Tier 3 — Niche",
+    type: "freelance", typeLabel: "Freelance",
+    cost: "free", costLabel: "Free (0% commission)",
+    exp: ["entry","mid"],
+    special: ["relocating","nontech"],
+    url: "https://contra.com",
+    desc: "The zero-commission freelance alternative to Upwork. Keep 100% of your earnings. Growing fast and increasingly respected by quality clients. Best for building a freelance client base.",
+    bestFor: "Freelancers who want to keep 100% of earnings with no commission.",
+    roles: "Design, Writing, Marketing, Tech, Video",
+    pros: ["Zero commission on all earnings", "Growing quality client base", "Clean portfolio and profile tools"],
+    cons: ["Smaller than Upwork", "Less brand recognition with all clients", "Fewer volume opportunities"],
+    note: "Most platforms take 10-20%. Contra takes none."
+  },
 ];
 
-const filterDefs = [
-  { tag: "entry", label: "Entry level" },
-  { tag: "mid", label: "Mid level" },
-  { tag: "senior", label: "Senior / 5+ yrs" },
-  { tag: "tech", label: "Tech roles" },
-  { tag: "non-tech", label: "Non-tech roles" },
-  { tag: "design", label: "Design" },
-  { tag: "marketing", label: "Marketing" },
-  { tag: "writing", label: "Writing / content" },
-  { tag: "customer support", label: "Customer support" },
-  { tag: "freelance", label: "Freelance / contract" },
-  { tag: "no visa", label: "No visa required" },
-  { tag: "relocating", label: "Relocating to Balkans" },
-  { tag: "startup", label: "Startup roles" },
-  { tag: "developers", label: "Developers only" },
-  { tag: "6-figure", label: "$100k+ roles" },
-  { tag: "async", label: "Async-first" },
-  { tag: "guided", label: "Guided / AI search" },
-];
+let filters = { type:"all", cost:"all", exp:"all", special:"all" };
+let expandedName = null;
 
-const tierLabels = { 1: "Tier 1 — curated", 2: "Tier 2 — filtered", 3: "Tier 3 — niche" };
-const tagLabels = {};
-filterDefs.forEach(f => tagLabels[f.tag] = f.label);
+function renderBoards() {
+  const container = document.getElementById('boardsContainer');
+  const filtered = boards.filter(b => {
+    if (filters.type !== "all" && b.type !== filters.type) return false;
+    if (filters.cost !== "all" && b.cost !== filters.cost) return false;
+    if (filters.exp !== "all" && !b.exp.includes(filters.exp)) return false;
+    if (filters.special !== "all" && !b.special.includes(filters.special)) return false;
+    return true;
+  });
 
-let active = new Set();
+  document.getElementById('boardCount').textContent = filtered.length + ' platform' + (filtered.length !== 1 ? 's' : '') + ' found';
 
-const filtersEl = document.getElementById("filters");
-filtersEl.style.cssText = "display:flex;flex-wrap:wrap;gap:8px;align-items:center;flex:1;";
-
-const cardsEl = document.getElementById("cards");
-const countEl = document.getElementById("count");
-const noResults = document.getElementById("no-results");
-
-filterDefs.forEach(({ tag, label }) => {
-  const btn = document.createElement("button");
-  btn.className = "pill";
-  btn.textContent = label;
-  btn.dataset.tag = tag;
-  btn.onclick = () => {
-    if (active.has(tag)) { active.delete(tag); btn.classList.remove("active"); }
-    else { active.add(tag); btn.classList.add("active"); }
-    render();
-  };
-  filtersEl.appendChild(btn);
-});
-
-document.getElementById("reset-btn").onclick = () => {
-  active.clear();
-  filtersEl.querySelectorAll(".pill").forEach(p => p.classList.remove("active"));
-  render();
-};
-
-function render() {
-  const visible = boards.filter(b => active.size === 0 || [...active].every(t => b.tags.includes(t)));
-  countEl.textContent = active.size === 0
-    ? "Showing all " + boards.length + " platforms"
-    : visible.length + " platform" + (visible.length !== 1 ? "s" : "") + " match your filters";
-
-  // Remove old cards but keep no-results
-  cardsEl.querySelectorAll(".card").forEach(c => c.remove());
-
-  if (visible.length === 0) {
-    noResults.style.display = "block";
+  if (filtered.length === 0) {
+    container.innerHTML = '<div class="no-results">No platforms match your current filters. Try broadening your selection.</div>';
     return;
   }
-  noResults.style.display = "none";
 
-  visible.forEach(b => {
-    const card = document.createElement("div");
-    card.className = "card";
-    const tagHTML = b.tags.map(t => `<span class="tag">${tagLabels[t] || t}</span>`).join("");
-    card.innerHTML = `
-      <div class="card-top">
-        <span class="card-name">${b.name}</span>
-        <span class="tier-badge tier-${b.tier}">${tierLabels[b.tier]}</span>
+  container.innerHTML = filtered.map(b => {
+    const isExpanded = expandedName === b.name;
+    const costClass = b.cost === 'free' ? 'meta-cost-free' : b.cost === 'freemium' ? 'meta-cost-freemium' : 'meta-cost-paid';
+    const tierClass = b.tier === 1 ? 'tier-1' : b.tier === 2 ? 'tier-2' : 'tier-3';
+    const prosHTML = b.pros.map(p => `<li>${p}</li>`).join('');
+    const consHTML = b.cons.map(c => `<li>${c}</li>`).join('');
+
+    return `<div class="board-card${isExpanded ? ' expanded' : ''}" onclick="toggleExpand('${b.name.replace(/'/g,"\\'").replace(/"/g,'&quot;')}')">
+      <div class="board-header">
+        <div>
+          <div class="board-name">${b.name}</div>
+          <div class="board-category">${b.typeLabel}</div>
+        </div>
+        <span class="tier-badge ${tierClass}">${b.tierLabel}</span>
       </div>
-      <div class="best-for"><strong>Best for:</strong> ${b.bestFor}</div>
-      <div class="tags">${tagHTML}</div>
-      <div class="note">${b.note}</div>
-    `;
-    cardsEl.insertBefore(card, noResults);
-  });
+      <div class="board-desc">${b.desc}</div>
+      <div class="board-meta">
+        <span class="meta-tag ${costClass}">${b.costLabel}</span>
+        <span class="meta-tag meta-type">${b.exp.join(' / ')}</span>
+        <a class="meta-tag meta-link" href="${b.url}" target="_blank" onclick="event.stopPropagation()">Visit →</a>
+      </div>
+      <div class="board-detail">
+        <div class="detail-grid">
+          <div>
+            <div class="detail-section">
+              <div class="detail-label">Best For</div>
+              <div class="detail-value">${b.bestFor}</div>
+            </div>
+            <div class="detail-section">
+              <div class="detail-label">Roles Available</div>
+              <div class="detail-value">${b.roles}</div>
+            </div>
+            <div class="detail-section">
+              <div class="detail-label">Insider Note</div>
+              <div class="detail-value">${b.note}</div>
+            </div>
+          </div>
+          <div>
+            <div class="detail-label">Pros & Cons</div>
+            <div class="pro-con-grid">
+              <ul class="pro-list">${prosHTML}</ul>
+              <ul class="con-list">${consHTML}</ul>
+            </div>
+          </div>
+        </div>
+        <a class="visit-btn" href="${b.url}" target="_blank" onclick="event.stopPropagation()">Visit ${b.name} →</a>
+      </div>
+      ${!isExpanded ? '<div class="click-hint">Click to expand</div>' : ''}
+    </div>`;
+  }).join('');
 }
 
-render();
+function toggleExpand(name) {
+  expandedName = expandedName === name ? null : name;
+  renderBoards();
+}
+
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const filterType = btn.dataset.filter;
+    const value = btn.dataset.value;
+    filters[filterType] = value;
+    btn.closest('.filter-options').querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    expandedName = null;
+    renderBoards();
+  });
+});
+
+function resetFilters() {
+  filters = { type:"all", cost:"all", exp:"all", special:"all" };
+  expandedName = null;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.filter-btn[data-value="all"]').forEach(b => b.classList.add('active'));
+  renderBoards();
+}
+
+renderBoards();
 </script>
 </body>
 </html>
